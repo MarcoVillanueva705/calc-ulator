@@ -1,32 +1,17 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="calculator">
+    <form @submit.prevent="calculate">
+    <input type="number" placeholder="amount" v-model="newCalc.balance">
+    <input  type="number" placeholder="interest rate" v-model="newCalc.pmt">
+    <select id="rates" name="Term">
+      <option value="15">15</option>  
+      <option value="30">30</option>
+    </select>
+    <button type="submit">Calculate</button>
+    </form>
+
+    <h2>Total Balance</h2><span>{{newCalc.balance}}</span>
+    <h2>Monthly Payment</h2><span>{{newCalc.pmt}}</span>
   </div>
 </template>
 
@@ -35,7 +20,52 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
-  }
+  },
+
+  data() {
+    return {
+      newCalc: {
+        balance: 0,
+        pmt: 0,
+      }
+    };
+  },
+
+  methods: {
+    
+  calculate(amount, interest, term) {
+    debugger;
+  let calc = { ...this.newCalc };
+  if (!amount || !interest || !term) return { balance: 0, pmt: 0 };
+
+  // Total loan cost in a fixed mortage is:
+  // r * p * n / (1 - (1 + r)^-n)
+
+  // where r = interest rate / 12
+  // n = number of payments or term * 12
+  // p = principal
+
+  const r = (interest * 0.01) / 12;
+  const n = term * 12;
+  const p = amount;
+
+  const balance = ((r * p * n) / (1 - Math.pow(1 + r, -n))).toFixed(2);
+  const pmt = (balance / n).toFixed(2);
+  this.newCalc = { balance:0, pmt:0};
+
+  // Uncomment for debug output
+  // console.log({ amount, interest, term });
+  // console.log({ balance, pmt });
+
+
+
+  return {
+    balance,
+    pmt
+  };
+} 
+  },
+
 }
 </script>
 

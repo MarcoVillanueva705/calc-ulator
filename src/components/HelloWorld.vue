@@ -34,8 +34,7 @@ export default {
   methods: {
     
   calculate(amount, interest, term) {
-    debugger;
-  let calc = { ...this.newCalc };
+  // let calc = { ...this.newCalc };
   if (!amount || !interest || !term) return { balance: 0, pmt: 0 };
 
   // Total loan cost in a fixed mortage is:
@@ -51,7 +50,7 @@ export default {
 
   const balance = ((r * p * n) / (1 - Math.pow(1 + r, -n))).toFixed(2);
   const pmt = (balance / n).toFixed(2);
-  this.newCalc = { balance:0, pmt:0};
+  // this.newCalc = { balance:0, pmt:0};
 
   // Uncomment for debug output
   // console.log({ amount, interest, term });
@@ -60,9 +59,9 @@ export default {
 
 
   return {
-    balance,
-    pmt
-  };
+balance,
+pmt
+};
 } 
   },
 
